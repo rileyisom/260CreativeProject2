@@ -1,69 +1,72 @@
-document.getElementById("weatherSubmit").addEventListener("click", function(event) {
+document.getElementById("nameSubmit").addEventListener("click", function(event) {
     event.preventDefault();
-    const value = document.getElementById("weatherInput").value;
-    if (value === "") return;
-    console.log(value);
-    const url = "http://api.openweathermap.org/data/2.5/weather?q=" + value + ",US&units=imperial" + "&APPID=54c0c52c55d72763004d82b1e2cdb280";
-    fetch(url)
+    const name = document.getElementById("nameInput").value;
+    if (name === "") name = "You";
+    console.log(name);
+
+    const chartURL = "https://quickchart.io/chart?bkg=white&c={ type: 'line', data: { labels: ['2015', '2016', '2017', '2018', '2019', '2020', '2021'], datasets: [{ label: '" + name + "', data: [150, 130, 80, 70, 60, 40, 20] }, { label: 'Kevin', data: [100, 200, 300, 400, 600, 800, 1200, ] }] }}";
+    fetch(chartURL)
     .then(function(response) {
-      return response.json();
-    }).then(function(json) {
-        let results = "";
-        results += '<h3>Current Weather in ' + json.name + '</h3>';
-        results += '<h3>' + json.main.temp + ' &deg;F' + '</h3>';
-        results += '<h3>' + 'Feels Like: ' + json.main.feels_like + '</h3>';
-        results += '<p>';
-        for (let i=0; i < json.weather.length; i++) {
-            let description1 = json.weather[i].description;
-            description1 = description1.toLowerCase()
-            .split(' ')
-            .map((s) => s.charAt(0).toUpperCase() + s.substring(1))
-            .join(' ');
-            results += '<h3>' + description1;
-            if (i !== json.weather.length - 1)
-                results += ", ";
-        }
-        for (let i=0; i < json.weather.length; i++) {
-            results += '<img src="http://openweathermap.org/img/w/' + json.weather[i].icon + '.png"/>';
-        }
-        results += '</h3>';
-        results += '</p>';
-        document.getElementById("weatherResults").innerHTML = results;
-        // console.log(results);
+        return response.blob();
+    }).then(function(blobResponse) {
+        const urlCreator = window.URL || window.webkitURL;
+        document.getElementById('graphResult').innerHTML = '<h2>Graph of Babes You Are (Not) Picking Up</h2>'
+        + '<hr>'
+        + '<div class="whiteSpace"></div>'
+        + '<p> This graph shows the number of babes you\'re picking up compared to Kevin</p>'
+        + '<img src="' + urlCreator.createObjectURL(blobResponse) + '"/>';  
     });
 
-    const url2 = "http://api.openweathermap.org/data/2.5/forecast?q=" + value + ", US&units=imperial" + "&APPID=54c0c52c55d72763004d82b1e2cdb280";
-    fetch(url2)
+
+    const adviceURL = "https://api.adviceslip.com/advice";
+    fetch(adviceURL)
     .then(function(response) {
         return response.json();
     }).then(function(json) {
-        let forecast = "";
-        forecast += '<table class="table">'
+        let resultAdvice = '<h2>Advice for You</h2>'
+        + '<hr>'
+        + '<br>'
+        + '<p> Obviously you need some help, so here\'s some advice to help you increase in your confidence.</p>'
+        + '<p> Advice will appear below:</p>'
+        + '<br>'
+        + '<p>' + name + ', ' + json.slip.advice + '</p>';
 
-        // First row of table
-        forecast += '<thead>';
-        forecast += '<tr>';
-        forecast += '<th scope="col"> Date/Time </th>';
-        forecast += '<th scope="col"> Temperature </th>';
-        forecast += '<th scope="col"> Wind Speed </th>';
-        forecast += '<th scope="col"> Weather Condition </th>';
-        forecast += '</tr>';
-        forecast += '</thead>';
-
-        // Rest of the rows for the table
-        forecast += '<tbody>';
-        for (let i=0; i < json.list.length; i++) {
-            forecast += '<tr>';
-            forecast += '<td>' + '<p>' + moment(json.list[i].dt_txt).format('lll') + '</p>' + '</td>';
-            forecast += '<td>' + '<p>Temperature: ' + json.list[i].main.temp + '</p>' + '</td>';
-            forecast += '<td>' + '<p>' + json.list[i].wind.speed + '</p>' + '</td>';
-            forecast += '<td>' + '<img src="http://openweathermap.org/img/w/' + json.list[i].weather[0].icon + '.png"/>' + '</td>';
-            forecast += '</tr>';
-        }
-        forecast += '</tbody>';
-        forecast += '</table>'
-        document.getElementById("forecastResults").innerHTML = forecast;
-        // console.log(forecast);
+        document.getElementById("adviceResult").innerHTML = resultAdvice;
     });
+
+    const quoteURL = "https://quote-garden.herokuapp.com/api/v3/quotes";
+    fetch(quoteURL)
+    .then(function(response) {
+        return response.json();
+    }).then(function(json) {
+        let entry = getRandomInt(0,9);
+        let resultQuote = '<h2>Inspirational Quote for You</h2>'
+        + '<hr>'
+        + '<br>'
+        + '<p> Now that you\'ve gotten some life changing advice, '
+        + 'it\'s time to learn from history\'s greatest teachers.</p>'
+        + '<p> An inspirational quote will appear below:</p>'
+        + '<br>'
+        + '<p>' + name + ', "' + json.data[entry].quoteText +'" - ' + json.data[entry].quoteAuthor + '</p>';
+
+        document.getElementById("quoteResult").innerHTML = resultQuote;
+
+        let congratsText = '<h2>Congratulations Lady Slayer!</h2>'
+        + '<hr>'
+        + '<br>'
+        + '<p>Congratulations. Now that you\'ve gotten some incredible advice, '
+        + 'and you\'ve been inspired by a historical figure, '
+        + 'you have everything you need to start picking up more babes!</p>'
+        + '<br>'
+
+        document.getElementById("congratsBox").innerHTML = congratsText;
+    });
+
+    function getRandomInt(min, max) {
+        min = Math.ceil(min);
+        max = Math.floor(max);
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
 });
 

@@ -3,27 +3,38 @@
 
 <head>
   <meta charset="utf-8" />
-  <title>Lab 2</title>
+  <title>Confidence Booster</title>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
   <link rel="stylesheet" href="/styles.css">
 </head>
 
 <body>
   <div class="whiteSpace"></div>
-  <h1>Weather</h1>
-  <form>
-    <label>Enter a U.S. city</label>
-    <input id="weatherInput" type="text"/>
-    <input id="weatherSubmit" type="submit" value="Submit"/>
-  </form>
-  
-  <div id="weatherResults" class="jumbotron">
-  </div>
 
+  <h1>Confidence Booster</h1>
+  <form>
+      <label>Enter someone's name who's confidence needs to be boosted: </label>
+      <br>
+      <input id="nameInput" type="text"/>
+      <input id="nameSubmit" type="submit" value="Enter"/>
+  </form>
   <div class="whiteSpace"></div>
-  <h1>Forecast</h1>
-  <div id="forecastResults">
+
+  <div id="graphResult" class="textBox">
   </div>
+  <div class="whiteSpace"></div>
+
+  <div id="adviceResult" class="textBox">
+  </div>
+  <div class="whiteSpace"></div>
+
+  <div id="quoteResult" class="textBox">
+  </div>
+  <div class="whiteSpace"></div>
+
+  <div id="congratsBox" class="textBox">
+  </div>
+  <div class="whiteSpace"></div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js" integrity="sha256-4iQZ6BVL4qNKlQ27TExEhBN1HFPvAvAMbFavKKosSWQ=" crossorigin="anonymous"></script>
   <script text="type/javascript" src="/script.js">
